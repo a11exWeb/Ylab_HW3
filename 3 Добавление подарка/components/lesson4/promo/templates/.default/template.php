@@ -25,8 +25,6 @@ $basketItems = $basket->getBasketItems();
 
 foreach ($basketItems as $basketItem ) {
 
-    echo $basketItem->getField('NAME') . "<br>";
-
     $price = $basketItem->getField('PRICE');
 
     if ($price >= $gift_value) {
@@ -47,20 +45,40 @@ foreach ($basketItems as $basketItem ) {
 
 }
 
+if (isset($_GET['count']) && ($_GET['count']>0)){
+
+    $gifts_count = htmlspecialchars($_GET['count']);
+
+    $fields = [
+        'PRODUCT_ID' => $gift_product_id ,
+        'QUANTITY' => $gifts_count,
+    ];
+
+$s = Bitrix\Catalog\Product\Basket::addProduct($fields);
+
+}
+
 
 ?>
 
 
 <div class="promo">
     <div class="promo__message">
-
-        <?php if ($items_counter >= $required_count ) { ?>
-            <p> Подарок добавлен в корзину </p>
+       <?php if ($items_counter >= $required_count ) { ?>
+            <p> Условие акции выполенено. Подарок добавлен в корзину </p>
         <?php } ?>
 
         <?php if ($items_counter < $required_count ) { ?>
             <p> Условия акции не выполнены </p>
         <?php } ?>
-
     </div>
+
+    <div class="promo__form" style="margin-top: 40px;">
+    <form action="" method="get">
+        <p>Xочу столько: <input type="number" name="count" placeholder="Количество подарков" style="min-width: 280px;"/></p>
+        <p><input type="submit" /></p>
+    </form>
+    </div>
+
+
 </div>
